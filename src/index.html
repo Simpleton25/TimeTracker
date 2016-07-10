@@ -1,0 +1,148 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+<link rel="stylesheet" type="text/css" href="style.css">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<h1>Time Tracker</h1>
+
+</head>
+ 
+
+<body>
+
+<div class="container">
+
+<div class="col-md-6">
+<h2> Subject 1  <div id="timeDisplay_s1">00:00:00</div> </h2>
+<button class="btn btn-primary" onclick="start('s1')">Start</button>
+<button class="btn" onclick="stop('s1')">Pause</button>
+<button class="btn" onclick="reset('s1')">Reset</button>
+
+<br>
+
+
+<h2> Subject 2 <div id="timeDisplay_s2">00:00:00</div></h2>
+<button class="btn btn-primary" onclick="start('s2')">Start</button>
+<button class="btn" onclick="stop('s2')">Pause</button>
+<button class="btn" onclick="reset('s2')">Reset</button>
+
+ <br>
+ </div>
+
+ <div class="col-md-6">
+
+<h2> Subject 3 <div id="timeDisplay_s3">00:00:00</div></h2>
+<button class="btn btn-primary" onclick="start('s3')">Start</button>
+<button class="btn" onclick="stop('s3')">Pause</button>
+<button class="btn" onclick="reset('s3')">Reset</button>
+
+ <br>
+
+<h2> Subject 4 <div id="timeDisplay_s4">00:00:00</div></h2>
+<button class="btn btn-primary" onclick="start('s4')">Start</button>
+<button class="btn" onclick="stop('s4')">Pause</button>
+<button class="btn" onclick="reset('s4')">Reset</button>
+</div>
+
+</div>
+
+<script>
+
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+var count = Array();
+	count['s1'] = parseInt(readCookie('s1')) ? parseInt(readCookie('s1')) : 0;
+	count['s2'] = parseInt(readCookie('s2')) ? parseInt(readCookie('s2')) : 0;
+	count['s3'] = parseInt(readCookie('s3')) ? parseInt(readCookie('s3')) : 0;
+	count['s4'] = parseInt(readCookie('s4')) ? parseInt(readCookie('s4')) : 0;
+
+var state = Array();
+	state['s1'] = false;
+	state['s2'] = false;
+	state['s3'] = false;
+	state['s4'] = false;
+
+function start(arg1) {
+    state[arg1]  = true; 
+}
+
+String.prototype.toHHMMSS = function () {
+        var sec_num = parseInt(this, 10); // don't forget the second param
+        var hours   = Math.floor(sec_num / 3600);
+        var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+        var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+        return hours+':'+minutes+':'+seconds;
+    }
+
+setInterval(function(){ 
+
+	
+
+    if(state['s1'] == true){
+        document.getElementById("timeDisplay_s1").innerHTML = count['s1'].toString().toHHMMSS(); count['s1']++; 
+        createCookie('s1', count['s1']);
+    }
+
+    if(state['s2'] == true){
+        document.getElementById("timeDisplay_s2").innerHTML = count['s2'].toString().toHHMMSS(); count['s2']++; 
+        createCookie('s2', count['s2']);
+    }
+
+    if(state['s3'] == true){
+        document.getElementById("timeDisplay_s3").innerHTML = count['s3'].toString().toHHMMSS(); count['s3']++; 
+        createCookie('s3', count['s3']);
+    }
+
+    if(state['s4'] == true){
+        document.getElementById("timeDisplay_s4").innerHTML = count['s4'].toString().toHHMMSS(); count['s4']++; 
+        createCookie('s4', count['s4']);
+    }
+    
+},1000);
+
+function stop(arg1) {
+state[arg1]  = false;
+}
+
+function reset(arg1) {
+count[arg1]= 0;
+state[arg1] = false;
+document.getElementById("timeDisplay_" + arg1).innerHTML = count[arg1].toString().toHHMMSS();
+}
+
+
+document.getElementById("timeDisplay_s1").innerHTML = count['s1'].toString().toHHMMSS();
+document.getElementById("timeDisplay_s2").innerHTML = count['s2'].toString().toHHMMSS();
+document.getElementById("timeDisplay_s3").innerHTML = count['s3'].toString().toHHMMSS();
+document.getElementById("timeDisplay_s4").innerHTML = count['s4'].toString().toHHMMSS();
+
+</script>
+
+</body>
+</html>
